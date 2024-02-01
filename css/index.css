@@ -1,0 +1,102 @@
+@import "../icon/iconfont.css";
+.container {
+}
+.main {
+	margin: 0 auto;
+	overflow: hidden;
+	border: 1px solid #a9a6a6;
+	border-top: none;
+}
+.main .block {
+	float: left;
+	width: 50px;
+	height: 50px;
+	background-color: rgb(192, 192, 192);
+	box-sizing: border-box;
+	border-top: 1px solid #a9a6a6;
+	border-left: 1px solid #a9a6a6;
+	position: relative;
+	box-shadow: inset -2px -2px #513838, inset 2px 2px #dedede;
+}
+.main .block:nth-child(9n + 1) {
+	/* border-left: none; */
+}
+.main .block:nth-child(n + 10) {
+	/* border-top: 1px solid black; */
+}
+
+.main .block.cleared {
+	box-shadow: none;
+}
+
+.block span {
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	width: fit-content;
+	height: fit-content;
+	font-weight: bold;
+	cursor: default;
+	font-size: 40px;
+}
+
+.iconfont.icon-flag {
+	color: red;
+	text-align: center;
+	line-height: 50px;
+	font-size: 40px;
+}
+
+.block span.one::before {
+	content: "1";
+	color: rgb(29, 15, 255);
+}
+.block span.two::before {
+	content: "2";
+	color: rgb(36, 126, 0);
+}
+.block span.three::before {
+	content: "3";
+	color: rgb(237, 0, 0);
+}
+.block span.four::before {
+	content: "4";
+	color: rgb(12, 3, 130);
+}
+.block span.five::before {
+	content: "5";
+	color: rgb(123, 0, 0);
+}
+.block span.six::before {
+	content: "6";
+	color: rgb(39, 128, 128);
+}
+.block span.seven::before {
+	content: "7";
+	color: rgb(0, 0, 0);
+}
+.block span.eight::before {
+	content: "8";
+	color: rgb(128, 128, 128);
+}
+
+.restart {
+	margin: 0 auto;
+	margin-top: 20px;
+	width: fit-content;
+}
+
+.result {
+	font-weight: bold;
+	font-size: 50px;
+    text-align: center;
+}
+
+.result .win {
+	color: green;
+    display: none;
+}
+.result .lose {
+	color: red;
+    display: none;
+}

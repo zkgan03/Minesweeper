@@ -1,0 +1,23 @@
+{
+  "id": "4429656",
+  "name": "扫雷",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1433738",
+      "name": "flag",
+      "font_class": "flag",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "11623079",
+      "name": "扫雷",
+      "font_class": "saoleix",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}
