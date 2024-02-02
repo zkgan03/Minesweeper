@@ -1,6 +1,5 @@
 @import "../icon/iconfont.css";
-.container {
-}
+
 .main {
 	margin: 0 auto;
 	overflow: hidden;
@@ -9,8 +8,8 @@
 }
 .main .block {
 	float: left;
-	width: 50px;
-	height: 50px;
+	width: 40px;
+	height: 40px;
 	background-color: rgb(192, 192, 192);
 	box-sizing: border-box;
 	border-top: 1px solid #a9a6a6;
@@ -18,18 +17,13 @@
 	position: relative;
 	box-shadow: inset -2px -2px #513838, inset 2px 2px #dedede;
 }
-.main .block:nth-child(9n + 1) {
-	/* border-left: none; */
-}
-.main .block:nth-child(n + 10) {
-	/* border-top: 1px solid black; */
-}
 
 .main .block.cleared {
 	box-shadow: none;
 }
 
-.block span {
+.block span,
+.iconfont.icon-flag::before {
 	position: absolute;
 	inset: 0;
 	margin: auto;
@@ -39,12 +33,9 @@
 	cursor: default;
 	font-size: 40px;
 }
-
-.iconfont.icon-flag {
+.iconfont.icon-flag::before {
 	color: red;
-	text-align: center;
-	line-height: 50px;
-	font-size: 40px;
+	font-size: 30px;
 }
 
 .block span.one::before {
@@ -80,23 +71,32 @@
 	color: rgb(128, 128, 128);
 }
 
+.options {
+	margin: 0 auto;
+	text-align: center;
+	width: fit-content;
+}
+
+.size-selection {
+	margin-top: 20px;
+}
+
 .restart {
 	margin: 0 auto;
 	margin-top: 20px;
-	width: fit-content;
 }
 
 .result {
 	font-weight: bold;
 	font-size: 50px;
-    text-align: center;
+	text-align: center;
 }
 
 .result .win {
 	color: green;
-    display: none;
+	display: none;
 }
 .result .lose {
 	color: red;
-    display: none;
+	display: none;
 }

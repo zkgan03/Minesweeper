@@ -1,14 +1,24 @@
 let container = document.querySelector(".container");
 let gameStatus = "";
 let result = document.querySelector(".result");
+//size selection
+let size = document.getElementById("size");
+//default size
+let row = 9;
+let col = 9;
+size.addEventListener("change", (e) => {
+	let value = e.target.value.split("x"); // width x height
+	col = parseInt(value[0]);
+	row = parseInt(value[1]);
+	restart();
+});
 
 function run() {
 	// init the view of the game
 	let main = document.createElement("div");
 	main.classList.add("main");
-	let row = 9;
-	let col = 9;
-	main.style.width = `${col * 50}px`;
+
+	main.style.width = `${col * 40}px`;
 	container.appendChild(main);
 
 	let blockArray = []; // store each row blocks
@@ -29,6 +39,7 @@ function run() {
 
 	// init the items after first clicks
 	let itemsArray = new Array(row).fill().map(() => new Array(col).fill(0));
+
 	// 10 indicate is opened
 	let itemsMapToClass = {
 		0: "",
@@ -45,6 +56,7 @@ function run() {
 
 	// store all indexs of mines to uncover when game over
 	let mines = [];
+	let numberOfMines = Math.floor(numOfBlock * 0.2);
 
 	// start init all data item after first click
 	main.addEventListener("click", handleFirstClick);
@@ -82,7 +94,7 @@ function run() {
 	// initialize the data items
 	function initItems(firstClickBlock) {
 		// place mine randomly
-		let numOfMine = getNoOfmine(col);
+		let numOfMine = numberOfMines;
 		while (numOfMine) {
 			let randomRow = Math.floor(Math.random() * row);
 			let randomCol = Math.floor(Math.random() * col);
@@ -126,20 +138,6 @@ function run() {
 		}
 
 		return count;
-	}
-
-	// get the number of mine depends on the number of column
-	function getNoOfmine(column) {
-		switch (column) {
-			case 9:
-				return 10;
-			case 16:
-				return 40;
-			case 30:
-				return 99;
-			default:
-				return 2;
-		}
 	}
 
 	// games started
@@ -267,6 +265,7 @@ function run() {
 	}
 }
 
+// restart button
 document.querySelector(".restart").addEventListener("click", restart);
 function restart() {
 	container.innerHTML = "";
