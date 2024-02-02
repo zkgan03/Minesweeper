@@ -7,7 +7,7 @@ const size = document.getElementById("size");
 let row = 9;
 let col = 9;
 size.addEventListener("change", (e) => {
-	let value = e.target.value.split("x"); // width x height
+	const value = e.target.value.split("x"); // width x height
 	col = parseInt(value[0]);
 	row = parseInt(value[1]);
 	restart();
@@ -15,7 +15,7 @@ size.addEventListener("change", (e) => {
 
 function run() {
 	// init the view of the game
-	let main = document.createElement("div");
+	const main = document.createElement("div");
 	main.classList.add("main");
 
 	main.style.width = `${col * 40}px`;
@@ -93,7 +93,7 @@ function run() {
 	}
 
 	function getTargetIndex(target) {
-		let targetIndex = {};
+		const targetIndex = {};
 		for (let i = 0; i < row; i++) {
 			let temp = blockArray[i].indexOf(target);
 			if (temp !== -1) {
@@ -110,8 +110,8 @@ function run() {
 		// place mine randomly
 		let numOfMine = numberOfMines;
 		while (numOfMine) {
-			let randomRow = Math.floor(Math.random() * row);
-			let randomCol = Math.floor(Math.random() * col);
+			const randomRow = Math.floor(Math.random() * row);
+			const randomCol = Math.floor(Math.random() * col);
 
 			// not placing mine on the first clicked block
 			if (
@@ -171,13 +171,13 @@ function run() {
 		switch (item) {
 			case ItemEnum.CLEARED:
 				return;
-			case 9:
+			case ItemEnum.MINE:
 				removeAllHandler();
 				gameStatus = "lose";
 				uncoverAllMines();
 				result.children[1].style.display = "block";
 				return;
-			case 0:
+			case ItemEnum.EMPTY:
 				uncoverAllEmptyBlockOf(targetIndex.row, targetIndex.col);
 				break;
 			default:
@@ -225,7 +225,7 @@ function run() {
 
 		const block = blockArray[rowIndex][colIndex];
 		const item = itemsArray[rowIndex][colIndex];
-		let span = document.createElement("span");
+		const span = document.createElement("span");
 		if (item !== ItemEnum.EMPTY) {
 			span.className = itemsMapToClass[item];
 		}
