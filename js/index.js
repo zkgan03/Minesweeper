@@ -1,8 +1,8 @@
-let container = document.querySelector(".container");
+const container = document.querySelector(".container");
 let gameStatus = "";
-let result = document.querySelector(".result");
+const result = document.querySelector(".result");
 //size selection
-let size = document.getElementById("size");
+const size = document.getElementById("size");
 //default size
 let row = 9;
 let col = 9;
@@ -21,9 +21,9 @@ function run() {
 	main.style.width = `${col * 40}px`;
 	container.appendChild(main);
 
-	let blockArray = []; // store each row blocks
+	const blockArray = []; // store each row blocks
 	let tempArray = []; // temp store each col blocks in a row
-	let numOfBlock = row * col;
+	const numOfBlock = row * col;
 	for (let i = 0; i < numOfBlock; i++) {
 		let block = document.createElement("div");
 		block.classList.add("block");
@@ -38,10 +38,24 @@ function run() {
 	// END Of INIT VIEW
 
 	// init the items after first clicks
-	let itemsArray = new Array(row).fill().map(() => new Array(col).fill(0));
+	const itemsArray = new Array(row).fill().map(() => new Array(col).fill(0));
 
 	// 10 indicate is opened
-	let itemsMapToClass = {
+	const ItemEnum = {
+		EMPTY: 0,
+		ONE: 1,
+		TWO: 2,
+		THREE: 3,
+		FOUR: 4,
+		FIVE: 5,
+		SIX: 6,
+		SEVEN: 7,
+		EIGHT: 8,
+		MINE: 9,
+		CLEARED: 10,
+	};
+
+	const itemsMapToClass = {
 		0: "",
 		1: "one",
 		2: "two",
@@ -55,20 +69,20 @@ function run() {
 	};
 
 	// store all indexs of mines to uncover when game over
-	let mines = [];
-	let numberOfMines = Math.floor(numOfBlock * 0.2);
+	const mines = [];
+	const numberOfMines = Math.floor(numOfBlock * 0.2);
 
 	// start init all data item after first click
 	main.addEventListener("click", handleFirstClick);
 	function handleFirstClick(e) {
-		let event = e || window.event;
-		let target = event.target || event.srcElement;
-		let targetIndex = getTargetIndex(target);
+		const event = e || window.event;
+		const target = event.target || event.srcElement;
+		const targetIndex = getTargetIndex(target);
 
 		initItems(targetIndex);
 
 		//uncover the clicked block
-		if (itemsArray[targetIndex.row][targetIndex.col] === 0) {
+		if (itemsArray[targetIndex.row][targetIndex.col] === ItemEnum.EMPTY) {
 			uncoverAllEmptyBlockOf(targetIndex.row, targetIndex.col);
 		} else {
 			uncoverBlockOf(targetIndex.row, targetIndex.col);
@@ -85,10 +99,10 @@ function run() {
 			if (temp !== -1) {
 				targetIndex.row = i;
 				targetIndex.col = temp;
-				break;
+				return targetIndex;
 			}
 		}
-		return targetIndex;
+		return -1;
 	}
 
 	// initialize the data items
@@ -100,38 +114,42 @@ function run() {
 			let randomCol = Math.floor(Math.random() * col);
 
 			// not placing mine on the first clicked block
-			if ((firstClickBlock.row === randomRow && firstClickBlock.col === randomCol) || itemsArray[randomRow][randomCol] === 9) {
+			if (
+				(firstClickBlock.row === randomRow && firstClickBlock.col === randomCol) ||
+				itemsArray[randomRow][randomCol] === ItemEnum.MINE
+			) {
 				continue;
 			}
 
 			mines.push({ row: randomRow, col: randomCol });
-			itemsArray[randomRow][randomCol] = 9;
+			itemsArray[randomRow][randomCol] = ItemEnum.MINE;
 			numOfMine--;
 		}
 
 		//calcualte nearby mine
 		for (let i = 0; i < row; i++) {
 			for (let j = 0; j < col; j++) {
-				if (itemsArray[i][j] === 0) {
+				if (itemsArray[i][j] === ItemEnum.EMPTY) {
 					itemsArray[i][j] = getNoOfNearbyMine(i, j);
 				}
 			}
 		}
 
-		console.log(itemsArray);
+		// console.log(itemsArray);
 	}
 
 	//calculate near by mine
 	function getNoOfNearbyMine(rowIndex, colIndex) {
 		let count = 0;
-		let startCountRow = rowIndex === 0 ? 0 : rowIndex - 1,
+		const startCountRow = rowIndex === 0 ? 0 : rowIndex - 1,
 			endCountRow = rowIndex === row - 1 ? rowIndex : rowIndex + 1,
 			startCountCol = colIndex === 0 ? 0 : colIndex - 1,
 			endCountCol = colIndex === col - 1 ? colIndex : colIndex + 1;
 
 		for (let i = startCountRow; i <= endCountRow; i++) {
 			for (let j = startCountCol; j <= endCountCol; j++) {
-				if (itemsArray[i][j] === 9) {
+				if (i === rowIndex && j === colIndex) continue;
+				if (itemsArray[i][j] === ItemEnum.MINE) {
 					count++;
 				}
 			}
@@ -142,25 +160,29 @@ function run() {
 
 	// games started
 	function handleGameClicks(e) {
-		let event = e;
-		let target = event.target;
-		if (target.children.length > 0) return;
+		const event = e || window.event;
+		const target = event.target || event.srcElement;
 
-		let targetIndex = getTargetIndex(target);
-		if (!target.classList.contains("block")) return;
+		const targetIndex = getTargetIndex(target);
+		if (targetIndex === -1) return;
 
-		let item = itemsArray[targetIndex.row][targetIndex.col];
+		const item = itemsArray[targetIndex.row][targetIndex.col];
 
-		if (item === 9) {
-			removeAllHandler();
-			gameStatus = "lose";
-			uncoverAllMines();
-			result.children[1].style.display = "block";
-			return;
-		} else if (item === 0) {
-			uncoverAllEmptyBlockOf(targetIndex.row, targetIndex.col);
-		} else {
-			uncoverBlockOf(targetIndex.row, targetIndex.col);
+		switch (item) {
+			case ItemEnum.CLEARED:
+				return;
+			case 9:
+				removeAllHandler();
+				gameStatus = "lose";
+				uncoverAllMines();
+				result.children[1].style.display = "block";
+				return;
+			case 0:
+				uncoverAllEmptyBlockOf(targetIndex.row, targetIndex.col);
+				break;
+			default:
+				uncoverBlockOf(targetIndex.row, targetIndex.col);
+				break;
 		}
 
 		// check if the game is over
@@ -173,21 +195,18 @@ function run() {
 	}
 
 	// using flood fill method
-	let tempVisited = new Array(row).fill().map(() => new Array(col).fill(false));
 	function uncoverAllEmptyBlockOf(rowIndex, colIndex) {
 		//out of boundary
 		if (rowIndex < 0 || rowIndex >= row || colIndex < 0 || colIndex >= col) return;
 
-		//visited
-		if (tempVisited[rowIndex][colIndex]) return;
+		//visited/uncovered
+		if (itemsArray[rowIndex][colIndex] === ItemEnum.CLEARED) return;
 
-		let item = itemsArray[rowIndex][colIndex];
-		if (item !== 0) {
+		const item = itemsArray[rowIndex][colIndex];
+		if (item !== ItemEnum.EMPTY) {
 			uncoverBlockOf(rowIndex, colIndex); // uncover the last block (to show the num)
 			return;
 		}
-
-		tempVisited[rowIndex][colIndex] = true; //set visited
 		uncoverBlockOf(rowIndex, colIndex);
 
 		uncoverAllEmptyBlockOf(rowIndex - 1, colIndex); // up
@@ -202,12 +221,12 @@ function run() {
 
 	function uncoverBlockOf(rowIndex, colIndex) {
 		if (rowIndex < 0 || rowIndex >= row || colIndex < 0 || colIndex >= col) return;
-		if (itemsArray[rowIndex][colIndex] === 10) return;
+		if (itemsArray[rowIndex][colIndex] === ItemEnum.CLEARED) return;
 
-		let block = blockArray[rowIndex][colIndex];
-		let item = itemsArray[rowIndex][colIndex];
+		const block = blockArray[rowIndex][colIndex];
+		const item = itemsArray[rowIndex][colIndex];
 		let span = document.createElement("span");
-		if (item !== 0) {
+		if (item !== ItemEnum.EMPTY) {
 			span.className = itemsMapToClass[item];
 		}
 		// remove flag icon
@@ -216,7 +235,7 @@ function run() {
 
 		block.classList.add("cleared");
 		block.appendChild(span);
-		itemsArray[rowIndex][colIndex] = 10;
+		itemsArray[rowIndex][colIndex] = ItemEnum.CLEARED;
 	}
 
 	function uncoverAllMines() {
@@ -229,7 +248,7 @@ function run() {
 		let flag = "win";
 		for (let i = 0; i < row; i++) {
 			for (let j = 0; j < col; j++) {
-				if (itemsArray[i][j] !== 10 && itemsArray[i][j] !== 9) {
+				if (itemsArray[i][j] !== ItemEnum.CLEARED && itemsArray[i][j] !== ItemEnum.MINE) {
 					flag = "";
 					break;
 				}
@@ -246,12 +265,12 @@ function run() {
 
 	main.addEventListener("mousedown", handleRightClick);
 	function handleRightClick(e) {
-		let event = e || window.event;
-		if (e.button === 2) {
-			let target = event.target || event.srcElement;
+		const event = e || window.event;
+		if (event.button === 2) {
+			const target = event.target || event.srcElement;
 			if (!target.classList.contains("block")) return;
-			let targetIndex = getTargetIndex(target);
-			let block = blockArray[targetIndex.row][targetIndex.col];
+			const targetIndex = getTargetIndex(target);
+			const block = blockArray[targetIndex.row][targetIndex.col];
 			if (!block.classList.contains("cleared")) {
 				block.classList.toggle("iconfont");
 				block.classList.toggle("icon-flag");
