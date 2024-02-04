@@ -4,20 +4,21 @@ const result = document.querySelector(".result");
 //size selection
 const size = document.getElementById("size");
 
+//default size
+let row = 9;
+let col = 9;
+size.addEventListener("change", (e) => {
+	let value = e.target.value.split("x"); // width x height
+	col = parseInt(value[0]);
+	row = parseInt(value[1]);
+	restart();
+});
+
+
 function run() {
 	// init the view of the game
-	const main = document.createElement("div");
+	let main = document.createElement("div");
 	main.classList.add("main");
-
-	let row = 9;
-	let col = 9;
-
-	size.addEventListener("change", (e) => {
-		const value = e.target.value.split("x"); // width x height
-		col = parseInt(value[0]);
-		row = parseInt(value[1]);
-		restart();
-	});
 
 	main.style.width = `${col * 40}px`;
 	container.appendChild(main);
@@ -94,7 +95,7 @@ function run() {
 	}
 
 	function getTargetIndex(target) {
-		const targetIndex = {};
+		let targetIndex = {};
 		for (let i = 0; i < row; i++) {
 			let temp = blockArray[i].indexOf(target);
 			if (temp !== -1) {
@@ -111,8 +112,8 @@ function run() {
 		// place mine randomly
 		let numOfMine = numberOfMines;
 		while (numOfMine) {
-			const randomRow = Math.floor(Math.random() * row);
-			const randomCol = Math.floor(Math.random() * col);
+			let randomRow = Math.floor(Math.random() * row);
+			let randomCol = Math.floor(Math.random() * col);
 
 			// not placing mine on the first clicked block
 			if (
@@ -172,13 +173,13 @@ function run() {
 		switch (item) {
 			case ItemEnum.CLEARED:
 				return;
-			case ItemEnum.MINE:
+			case 9:
 				removeAllHandler();
 				gameStatus = "lose";
 				uncoverAllMines();
 				result.children[1].style.display = "block";
 				return;
-			case ItemEnum.EMPTY:
+			case 0:
 				uncoverAllEmptyBlockOf(targetIndex.row, targetIndex.col);
 				break;
 			default:
@@ -226,7 +227,7 @@ function run() {
 
 		const block = blockArray[rowIndex][colIndex];
 		const item = itemsArray[rowIndex][colIndex];
-		const span = document.createElement("span");
+		let span = document.createElement("span");
 		if (item !== ItemEnum.EMPTY) {
 			span.className = itemsMapToClass[item];
 		}
