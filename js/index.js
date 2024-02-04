@@ -3,20 +3,21 @@ let gameStatus = "";
 const result = document.querySelector(".result");
 //size selection
 const size = document.getElementById("size");
-//default size
-let row = 9;
-let col = 9;
-size.addEventListener("change", (e) => {
-	const value = e.target.value.split("x"); // width x height
-	col = parseInt(value[0]);
-	row = parseInt(value[1]);
-	restart();
-});
 
 function run() {
 	// init the view of the game
 	const main = document.createElement("div");
 	main.classList.add("main");
+
+	let row = 9;
+	let col = 9;
+
+	size.addEventListener("change", (e) => {
+		const value = e.target.value.split("x"); // width x height
+		col = parseInt(value[0]);
+		row = parseInt(value[1]);
+		restart();
+	});
 
 	main.style.width = `${col * 40}px`;
 	container.appendChild(main);
@@ -263,7 +264,6 @@ function run() {
 		e.preventDefault();
 	});
 
-	main.addEventListener("mousedown", handleRightClick);
 	function handleRightClick(e) {
 		const event = e || window.event;
 		if (event.button === 2) {
@@ -277,6 +277,7 @@ function run() {
 			}
 		}
 	}
+	main.addEventListener("mousedown", handleRightClick);
 
 	function removeAllHandler() {
 		main.removeEventListener("click", handleGameClicks);
@@ -285,7 +286,6 @@ function run() {
 }
 
 // restart button
-document.querySelector(".restart").addEventListener("click", restart);
 function restart() {
 	container.innerHTML = "";
 	result.children[0].style.display = "none";
@@ -293,5 +293,6 @@ function restart() {
 
 	run();
 }
+document.querySelector(".restart").addEventListener("click", restart);
 
 run();
