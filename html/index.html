@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>MineSweeper</title>
+		<link
+			rel="stylesheet"
+			href="../css/index.css"
+		/>
+
+		<style></style>
+	</head>
+	<body>
+		<div class="container"></div>
+		<div class="options">
+			<div class="size-selection">
+				<label for="size">Current Size (Select will cause the game to restart) : </label>
+				<select
+					name="size"
+					id="size"
+				>
+					<option value="9x9">9 x 9</option>
+					<option value="16x16">16 x 16</option>
+					<option value="30x16">30 x 16</option>
+				</select>
+			</div>
+
+			<div class="restart">
+				<button>Restart</button>
+			</div>
+		</div>
+		<div class="result">
+			<span class="win">You win</span>
+			<span class="lose">You lose</span>
+		</div>
+		<script
+			src="../js/index.js"
+		></script>
+	</body>
+</html>
