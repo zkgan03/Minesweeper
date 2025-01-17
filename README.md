@@ -1,5 +1,5 @@
 # Minesweeper Project in JS
-This is just for my learning purpose
+[Demo Site](https://minesweeper-1sw.pages.dev/)
 
 ## Algorithms used and Problem solved
 1. Used 2D array to get the abstraction of view
